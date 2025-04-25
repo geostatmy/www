@@ -33,15 +33,10 @@
       border-radius: 8px;
     }
 
-    imgx {
-      width: 100%;
-      max-width: 700px;
+    .featured-image img {
+      width: 100%;   /* Make image responsive */
+      max-width: 100px; /* Limit image size on larger screens */
       height: auto;
-      display: block;
-      margin: 0 auto;
-      cursor: pointer;
-      transition: transform 0.6s ease, opacity 0.6s ease;
-      border: 0px solid #ccc;
       border-radius: 8px;
     }
 
@@ -122,7 +117,7 @@
 <body>
 
   <!-- Image Display -->
-  <div>
+  <div class="featured-image">
     <img class="imgx" src="https://www.geostatmy.com/vcard/bismillah.png">
   </div>
   <img id="flipImage" src="https://www.geostatmy.com/vcard/gs_mail_f.png" alt="Flip Image">
