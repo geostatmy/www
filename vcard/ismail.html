@@ -120,15 +120,23 @@
       }, 600); // Wait for fade-out before changing
     });
   </script>
-  
+    <script>
+    // Function to copy the phone number
+    function copyPhoneNumber() {
+      const phoneNumber = "+60133980090";  // Replace with your phone number
+      navigator.clipboard.writeText(phoneNumber).then(() => {
+        alert("Phone number copied to clipboard!");
+      });
+    }
+  </script>
 <p style="font-size: 12px; color: grey;">Click or zoom on the card for more details.</p>
 <!-- WhatsApp Button -->
-  <button class="button whatsapp-button" onclick="window.location.href='https://wa.me/15551234567'">
+  <button class="button whatsapp-button" onclick="window.location.href='https://wa.me/60133980090'">
     Chat with Us on WhatsApp
   </button>
 
   <!-- Phone Call Button -->
-  <button class="button call-button" onclick="window.location.href='tel:+15551234567'">
+  <button class="button call-button" onclick="window.location.href='tel:+60133980090'">
     Call Us
   </button>
 
