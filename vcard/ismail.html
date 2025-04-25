@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Auto Flip Image</title>
+  <title>Flip Image Up and Down</title>
   <style>
     body {
       text-align: center;
@@ -11,40 +11,46 @@
     }
 
     img {
-      width: 300px;
+      width: 700px;
       cursor: pointer;
-      transition: transform 0.4s ease-in-out;
+      transition: transform 0.6s ease, opacity 0.6s ease;
       border: 0px solid #ccc;
       border-radius: 8px;
     }
 
-    .flip {
-      transform: scaleX(1);
+    .fade-out {
+      opacity: 0;
+    }
+
+    .flip-vertical {
+      transform: scaleX(-1);
     }
   </style>
 </head>
 <body>
 
-  <h2>Click the Image to Flip</h2>
-  <img id="flipImage" src="https://www.geostatmy.com/vcard/gs_mail_f.png" alt="Click">
+  
+  <img id="flipImage" src="https://www.geostatmy.com/vcard/gs_mail_f.png" alt="Flip Image">
 
   <script>
     const img = document.getElementById("flipImage");
     const img1 = "https://www.geostatmy.com/vcard/gs_mail_f.png";
-    const img2 = "https://www.geostatmy.com/vcard/gs_mail_b.png";
+    const img2 = "https://www.geostatmy.com/vcard/gs_mail_bflip.png";
+    let isFlipped = false;
 
     img.addEventListener("click", () => {
-      // Flip to second image
-      img.classList.add("flip");
-      img.src = img2;
+      // Start fade-out
+      img.classList.add("fade-out");
 
-      // After 3 seconds, flip back
       setTimeout(() => {
-        img.classList.remove("flip");
-        img.src = img1;
-      }, 3000);
+        // Switch image and apply vertical flip
+        img.src = isFlipped ? img1 : img2;
+        img.classList.toggle("flip-vertical");
+        img.classList.remove("fade-out");
+        isFlipped = !isFlipped;
+      }, 600); // Wait for fade-out before changing
     });
   </script>
-
+<h3>Click for details</h3>
 </body>
 </html>
