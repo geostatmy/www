@@ -40,7 +40,61 @@
     .flip-vertical {
       transform: scaleX(-1);
     }
+
+    /* General Body Styling */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #f4f4f4;
+    }
+
+    /* Button Styles */
+    .button {
+      padding: 15px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+      margin: 10px;
+    }
+
+    /* WhatsApp Button */
+    .whatsapp-button {
+      background-color: #25D366; /* WhatsApp Green */
+      color: white;
+    }
+
+    .whatsapp-button:hover {
+      background-color: #128C7E;
+      transform: scale(1.05);
+    }
+
+    /* Phone Call Button */
+    .call-button {
+      background-color: #34b7f1; /* Light Blue */
+      color: white;
+    }
+
+    .call-button:hover {
+      background-color: #007B8F;
+      transform: scale(1.05);
+    }
+
+    /* Copy Phone Button */
+    .copy-button {
+      background-color: #ff5722; /* Orange */
+      color: white;
+    }
+
+    .copy-button:hover {
+      background-color: #e64a19;
+      transform: scale(1.05);
+    }
   </style>
+
+  
 </head>
 <body>
 
@@ -68,5 +122,20 @@
   </script>
   
 <p style="font-size: 12px; color: grey;">Click or zoom on the card for more details.</p>
+<!-- WhatsApp Button -->
+  <button class="button whatsapp-button" onclick="window.location.href='https://wa.me/15551234567'">
+    Chat with Us on WhatsApp
+  </button>
+
+  <!-- Phone Call Button -->
+  <button class="button call-button" onclick="window.location.href='tel:+15551234567'">
+    Call Us
+  </button>
+
+  <!-- Copy Phone Number Button -->
+  <button class="button copy-button" onclick="copyPhoneNumber()">
+    Copy Phone Number
+  </button>
+  
 </body>
 </html>
