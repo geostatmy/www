@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Flip Image</title>
+  <style>
+    body {
+      text-align: center;
+      padding: 40px;
+      font-family: sans-serif;
+    }
+
+    img {
+      width: 300px;
+      cursor: pointer;
+      transition: transform 0.4s ease-in-out;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .flip {
+      transform: scaleX(-1);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Click the Image to Flip</h2>
+  <img id="flipImage" src="https://www.geostatmy.com/geostat_logo5.png" alt="Flip Image">
+
+  <script>
+    const img = document.getElementById("flipImage");
+    const img1 = "https://www.geostatmy.com/geostat_logo5.png";
+    const img2 = "https://via.placeholder.com/300x150?text=Second+Image";
+
+    img.addEventListener("click", () => {
+      // Flip to second image
+      img.classList.add("flip");
+      img.src = img2;
+
+      // After 3 seconds, flip back
+      setTimeout(() => {
+        img.classList.remove("flip");
+        img.src = img1;
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>
