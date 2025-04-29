@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>3D Flip with Drag and Mobile Support</title>
+<title>3D Flip with Drag and Collapsible Panel</title>
 <style>
   .flip-container {
     perspective: 2000px;
@@ -47,6 +46,43 @@
     pointer-events: none;
     user-select: none;
   }
+
+  /* Style for the collapsible panel */
+  #panel {
+    display: block;
+    background: #f0f0f0;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    text-align: center;
+    border-top: 1px solid #ddd;
+  }
+
+  #panel a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin: 10px 0;
+  }
+
+  #panel a:hover {
+    color: #007BFF;
+  }
+
+  #togglePanelBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  #togglePanelBtn:hover {
+    background-color: #0056b3;
+  }
 </style>
 </head>
 <body>
@@ -62,6 +98,15 @@
   </div>
 </div>
 
+<!-- Button to toggle the panel -->
+<button id="togglePanelBtn">Toggle Panel</button>
+
+<!-- Collapsible panel -->
+<div id="panel">
+  <a href="https://www.example.com" target="_blank">Visit Website</a>
+  <a href="https://www.facebook.com" target="_blank">Go to Facebook</a>
+</div>
+
 <script>
 let isFlipped = false;
 let dragRotationX = 0;
@@ -72,6 +117,8 @@ let moved = false;
 
 const flipCard = document.getElementById('flipCard');
 const flipper = document.getElementById('flipper');
+const togglePanelBtn = document.getElementById('togglePanelBtn');
+const panel = document.getElementById('panel');
 
 // Desktop events (mousedown, mousemove, mouseup)
 flipCard.addEventListener('mousedown', (e) => {
@@ -160,6 +207,15 @@ function updateTransform() {
   const flipY = isFlipped ? 180 : 0;
   flipper.style.transform = `rotateY(${flipY + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
 }
+
+// Toggle panel visibility with animation
+togglePanelBtn.addEventListener('click', () => {
+  if (panel.style.maxHeight) {
+    panel.style.maxHeight = null;  // Collapse the panel
+  } else {
+    panel.style.maxHeight = panel.scrollHeight + "px";  // Expand the panel
+  }
+});
 </script>
 
 </body>
