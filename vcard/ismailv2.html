@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3D Flip with Drag and Mobile Support</title>
+<style>
+  .flip-container {
+    perspective: 2000px;
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    cursor: grab;
+  }
+
+  .flipper {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    position: relative;
+    transition: transform 0.6s ease;
+  }
+
+  .front, .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .front {
+    background: #eee;
+  }
+
+  .back {
+    background: #ddd;
+    transform: rotateY(180deg);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="flip-container" id="flipCard">
+  <div class="flipper" id="flipper">
+    <div class="front">
+      <img src="https://www.geostatmy.com/vcard/gs_mail_f.png" alt="Front">
+    </div>
+    <div class="back">
+      <img src="https://www.geostatmy.com/vcard/gs_mail_b.png" alt="Back">
+    </div>
+  </div>
+</div>
+
+<script>
+let isFlipped = false;
+let dragRotationX = 0;
+let dragRotationY = 0;
+let startX, startY;
+let isDragging = false;
+let moved = false;
+
+const flipCard = document.getElementById('flipCard');
+const flipper = document.getElementById('flipper');
+
+// Desktop events (mousedown, mousemove, mouseup)
+flipCard.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  moved = false;
+  startX = e.clientX;
+  startY = e.clientY;
+  flipCard.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+
+  if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+    moved = true;
+    dragRotationY += dx * 0.5;
+    dragRotationX -= dy * 0.5;
+    startX = e.clientX;
+    startY = e.clientY;
+
+    flipper.style.transition = 'none';
+    updateTransform();
+  }
+});
+
+document.addEventListener('mouseup', (e) => {
+  if (isDragging) {
+    flipCard.style.cursor = 'grab';
+    isDragging = false;
+    flipper.style.transition = 'transform 0.6s ease';
+
+    if (!moved) {
+      // Only flip if it was a click (not drag)
+      isFlipped = !isFlipped;
+    }
+
+    updateTransform();
+  }
+});
+
+// Mobile events (touchstart, touchmove, touchend)
+flipCard.addEventListener('touchstart', (e) => {
+  isDragging = true;
+  moved = false;
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+  flipCard.style.cursor = 'grabbing';
+});
+
+flipCard.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  const dx = e.touches[0].clientX - startX;
+  const dy = e.touches[0].clientY - startY;
+
+  if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+    moved = true;
+    dragRotationY += dx * 0.5;
+    dragRotationX -= dy * 0.5;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+
+    flipper.style.transition = 'none';
+    updateTransform();
+  }
+});
+
+flipCard.addEventListener('touchend', () => {
+  if (isDragging) {
+    flipCard.style.cursor = 'grab';
+    isDragging = false;
+    flipper.style.transition = 'transform 0.6s ease';
+
+    if (!moved) {
+      // Only flip if it was a click (not drag)
+      isFlipped = !isFlipped;
+    }
+
+    updateTransform();
+  }
+});
+
+// Helper function to update the transform property
+function updateTransform() {
+  const flipY = isFlipped ? 180 : 0;
+  flipper.style.transform = `rotateY(${flipY + dragRotationY}deg) rotateX(${dragRotationX}deg)`;
+}
+</script>
+
+</body>
+</html>
