@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ismail - Geostat Sdn Bhd</title>
+<title>3D Drag Rotate Image</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -182,10 +182,40 @@
 .fullscreen-button:hover {
   background: #6d4c41;
 }
+
+.fullscreen-icon-only {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #4e342e;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.fullscreen-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #4e342e;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+
+
+
+<button class="fullscreen-toggle" onclick="toggleFullscreen(this)">
+  <i class="fas fa-expand"></i>
+</button>
 
 <div class="flip-container" id="flipCard">
     <br><br>
@@ -203,9 +233,7 @@
     Let's Connect!
     <span class="arrow">&#9660;</span>
 </button>
-<button class="fullscreen-button" onclick="openFullscreen()">
-  <i class="fas fa-expand"></i>
-</button>
+
 
 
 <div class="panel" id="menuPanel">
@@ -340,6 +368,22 @@ function togglePanel() {
     // Adjust the menu width to match the button width
     const buttonWidth = button.offsetWidth;
     panel.style.maxWidth = `${buttonWidth}px`;
+}
+
+function toggleFullscreen(button) {
+  const icon = button.querySelector('i');
+
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().then(() => {
+      icon.classList.remove('fa-expand');
+      icon.classList.add('fa-compress');
+    });
+  } else {
+    document.exitFullscreen().then(() => {
+      icon.classList.remove('fa-compress');
+      icon.classList.add('fa-expand');
+    });
+  }
 }
 </script>
 
