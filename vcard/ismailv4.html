@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3D Drag Rotate Image</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+    }
+
+    .flip-container {
+        perspective: 2000px;
+        width: 600px;
+        height: 400px;
+        margin: 20px auto;
+        cursor: grab;
+        position: relative;
+    }
+
+    .flipper {
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        position: relative;
+        transition: transform 0.6s ease;
+    }
+
+    .front, .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .back {
+        background: #ddd;
+        transform: rotateY(180deg);
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .panel {
+        width: 100%;
+        max-width: 200px; /* Set this to the size of the toggle button */
+        margin: 0 auto;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+        max-height: 0;
+        opacity: 0;
+    }
+
+    .panel.visible {
+        max-height: 400px;
+        opacity: 1;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        gap: 10px;
+    }
+
+    .menu a {
+        text-decoration: none;
+        font-size: 20px;
+        color: #4e342e; /* Dark brown */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 15px;
+        border-radius: 6px;
+        transition: background 0.3s ease;
+    }
+
+    .menu a:hover {
+        background: rgba(78, 52, 46, 0.1);
+    }
+
+    .toggle-button {
+        display: block;
+        margin: 10px auto;
+        padding: 10px 20px;
+        background: #4e342e; /* Dark brown */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .toggle-button .arrow {
+        font-size: 18px;
+        transition: transform 0.3s ease;
+    }
+
+    .toggle-button.active .arrow {
+        transform: rotate(180deg);
+    }
+
+    /* Mobile responsive styles */
+    @media (max-width: 768px) {
+        .menu {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toggle-button {
+            width: 100%;
+        }
+    }
+
+    .popup-message {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.5); /* transparent black */
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .popup-message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .popup-message .close-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="flip-container" id="flipCard">
+    <div class="flipper" id="flipper">
+        <div class="front">
+            <img src="https://www.geostatmy.com/vcard/gs_mail_f.png" alt="Front">
+        </div>
+        <div class="back">
+            <img src="https://www.geostatmy.com/vcard/gs_mail_b.png" alt="Back">
+        </div>
+    </div>
+</div>
+
+<button class="toggle-button" onclick="togglePanel()">
+    Let's Connect!
+    <span class="arrow">&#9660;</span>
+</button>
+
+<div class="panel" id="menuPanel">
+    <div class="menu">
+        <a href="https://example.com" target="_blank">
+            <i class="fas fa-globe"></i> Website
+        </a>
+        <a href="https://www.facebook.com" target="_blank">
+            <i class="fab fa-facebook"></i> Facebook
+        </a>
+        <a href="https://wa.me/1234567890" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="tel:+1234567890" target="_blank">
+            <i class="fas fa-phone"></i> Phone
+        </a>
+        <a href="https://www.google.com/maps" target="_blank">
+            <i class="fas fa-map-marker-alt"></i> Location
+        </a>
+        <a href="mailto:example@example.com">
+            <i class="fas fa-envelope"></i> Email
+        </a>
+    </div>
+</div>
+
+<script>
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let rotationX = 0;
+let rotationY = 0;
+let currentRotationX = 0;
+let currentRotationY = 0;
+let totalDelta = 0;
+let isFlipped = false;
+
+const flipper = document.getElementById('flipper');
+const flipCard = document.getElementById('flipCard');
+const threshold = 10; // pixels to count as drag
+
+function updateTransform() {
+    flipper.style.transform = `rotateY(${rotationY}deg) rotateX(${rotationX}deg)`;
+}
+
+// START DRAG
+function startDrag(x, y) {
+    isDragging = true;
+    startX = x;
+    startY = y;
+    totalDelta = 0;
+}
+
+// MOVE DRAG
+function moveDrag(x, y) {
+    if (!isDragging) return;
+    const deltaX = x - startX;
+    const deltaY = y - startY;
+    totalDelta += Math.abs(deltaX) + Math.abs(deltaY);
+
+    rotationY = currentRotationY + deltaX * 0.5;
+    rotationX = currentRotationX - deltaY * 0.5;
+
+    updateTransform();
+}
+
+// END DRAG
+function endDrag(x, y) {
+    if (!isDragging) return;
+    isDragging = false;
+
+    currentRotationX = rotationX;
+    currentRotationY = rotationY;
+
+    if (totalDelta < threshold) {
+        // Minimal movement: flip the card
+        isFlipped = !isFlipped;
+        currentRotationY = isFlipped ? 180 : 0;
+        currentRotationX = 0;
+        rotationY = currentRotationY;
+        rotationX = currentRotationX;
+        updateTransform();
+    }
+}
+
+// MOUSE EVENTS
+flipCard.addEventListener('mousedown', (e) => {
+    startDrag(e.clientX, e.clientY);
+});
+document.addEventListener('mousemove', (e) => {
+    moveDrag(e.clientX, e.clientY);
+});
+document.addEventListener('mouseup', (e) => {
+    endDrag(e.clientX, e.clientY);
+});
+
+// TOUCH EVENTS
+flipCard.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+        startDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+});
+document.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 1) {
+        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+    }
+});
+document.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+    endDrag(startX, startY);
+
+    // If there was no drag, toggle flip
+    if (totalDelta < threshold) {
+        isFlipped = !isFlipped;
+        currentRotationY = isFlipped ? 180 : 0;
+        currentRotationX = 0;
+        rotationY = currentRotationY;
+        rotationX = currentRotationX;
+        updateTransform();
+    }
+});
+
+function togglePanel() {
+    const panel = document.getElementById('menuPanel');
+    const button = document.querySelector('.toggle-button');
+    panel.classList.toggle('visible');
+    button.classList.toggle('active');
+    // Adjust the menu width to match the button width
+    const buttonWidth = button.offsetWidth;
+    panel.style.maxWidth = `${buttonWidth}px`;
+}
+</script>
+
+<div id="popup" class="popup-message">
+  <span>Assalamualaikum. Please click or drag the card for details.</span>
+  <button class="close-btn" onclick="closePopup()">×</button>
+</div>
+
+<script>
+  const popup = document.getElementById('popup');
+
+  function closePopup() {
+    popup.classList.remove('show');
+  }
+
+  window.addEventListener('load', () => {
+    popup.classList.add('show');
+    setTimeout(() => {
+      closePopup();
+    }, 5000); // auto close after 5 seconds
+  });
+</script>
+
+</body>
+</html>
