@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ismail - Geostat Sdn Bhd</title>
+<title>3D Drag Rotate Image</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -219,12 +219,166 @@
     margin: 0;
 }
 }
+.trademark-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 12px;
+    background-color: #4e342e;
+    color: #fff;
+    border-radius: 999px;
+    margin: 10px auto 0;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.trademark-pill.fixed-bottom-right {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    padding: 5px 14px;
+    font-size: 12px;
+    background-color: #c0b9c7;
+    color: #fff;
+    border-radius: 999px;
+    z-index: 1000;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    opacity: 0;
+    animation: fadeInTrademark 1.2s ease-out forwards;
+}
+
+.trademark-pill-floating {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 12px;
+    font-size: 12px;
+    background-color: rgba(255, 255, 255, 0.2); /* transparent white */
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    font-weight: 500;
+    z-index: 1000;
+    pointer-events: none; /* not clickable */
+    opacity: 0;
+    animation: fadeInTrademark 1.2s ease-out forwards;
+}
+
+@keyframes fadeInTrademark {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Position the QR code icon at the top left */
+  .qr-code-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  /* Optional: Adjust size of the icon */
+  .qr-code-icon i {
+    font-size: 30px;
+    color: white;
+  }
+
+  /* Dimming background overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+    z-index: 999;
+  }
+
+  /* QR code popup style */
+  .qr-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    text-align: center;
+  }
+
+  .qr-popup.show {
+    display: block;
+  }
+
+  .qr-popup img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 15px;
+  }
+
+  /* X icon for closing */
+  .close-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #333;
+  }
+  .popup-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  text-shadow: 2px 2px 0 #333, 4px 4px 0 #666;
+  transform: rotateX(10deg) rotateY(10deg);
+  margin-bottom: 20px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
+
+.animated-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  color: #000;
+  text-align: center;
+  animation: fadeInUp 1s ease-out both;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
 
-
+<div class="trademark-pill fixed-bottom-right">© Made by DigitalKad</div>
 
 <button class="fullscreen-toggle" onclick="toggleFullscreen(this)">
   <i class="fas fa-expand"></i>
@@ -389,11 +543,11 @@ function toggleFullscreen(button) {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen().then(() => {
       icon.classList.remove('fa-expand');
-      icon.classList.add('fa-compress');
+      icon.classList.add('fa-times');
     });
   } else {
     document.exitFullscreen().then(() => {
-      icon.classList.remove('fa-compress');
+      icon.classList.remove('fa-times');
       icon.classList.add('fa-expand');
     });
   }
@@ -431,6 +585,36 @@ function openFullscreen() {
     elem.msRequestFullscreen();
   }
 }
+</script>
+
+<!-- QR Code Icon -->
+<div class="qr-code-icon" id="qrCodeIcon">
+  <i class="fas fa-qrcode"></i>
+</div>
+
+<!-- Dimming background overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- QR Code Popup (hidden by default) -->
+<div class="qr-popup" id="qrPopup">
+  <!-- Close icon (X) -->
+  <i class="fas fa-times close-icon" onclick="closeQrPopup()"></i>
+  <div class="animated-title">Ismail's Digital Namecard</div>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/QR_Code_Example.svg/736px-QR_Code_Example.svg.png?20111025115625" alt="QR Code">
+</div>
+
+<script>
+  // Show QR popup and overlay when icon is clicked
+  document.getElementById('qrCodeIcon').addEventListener('click', function() {
+    document.getElementById('qrPopup').classList.add('show');
+    document.getElementById('overlay').style.display = 'block'; // Show overlay
+  });
+
+  // Close QR popup and hide overlay when X icon is clicked
+  function closeQrPopup() {
+    document.getElementById('qrPopup').classList.remove('show');
+    document.getElementById('overlay').style.display = 'none'; // Hide overlay
+  }
 </script>
 
 </body>
