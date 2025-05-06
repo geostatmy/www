@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teras 1 Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    .chart-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+    .summary {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #eee;
+    }
+    canvas {
+      margin-top: 20px;
+    }
+    .progress-container {
+      margin-top: 10px;
+    }
+    .progress-bar {
+      height: 20px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: #4CAF50;
+      text-align: center;
+      color: white;
+      line-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>KEMAJUAN TERAS 1</h1>
+  <div class="summary">
+  <div class="chart-container">
+    <canvas id="pieChart" width="200" height="200"></canvas>
+  </div>
+  
+    <strong>Purata Kemajuan Teras 1:</strong> 43.1%<br>
+    <strong>Status Keseluruhan TERAS 1:</strong><br>
+    ✅ Selesai: 1<br>
+    🔄 Sedang Dijalankan: 6<br>
+    ⏳ Belum Mula: 1<br><br>
+  </div>
+  <br>
+  
+  <h2>INISIATIF STRATEGIK</h2>
+  <table>
+    <canvas id="barChart" width="400" height="150"></canvas>
+  </table>
+
+  <h2>T1S1</h2>
+  <table>
+    <tr><th>Tindakan Teknikal</th><th>Kemajuan</th><th>Status</th></tr>
+    <tr><td>TK1: Memperkemas struktur organisasi IBW<br><div class="progress-bar"><div class="progress-fill" style="width: 50%">50%</div></div></td><td>50%</td><td>🔄</td></tr>
+    <tr><td>TK2: Mewujudkan laluan kerjaya yang jelas<br><div class="progress-bar"><div class="progress-fill" style="width: 25%">25%</div></div></td><td>25%</td><td>🔄</td></tr>
+    <tr><td>TK3: Sijil profesional pengurusan wakaf<br><div class="progress-bar"><div class="progress-fill" style="width: 0%">0%</div></div></td><td>0%</td><td>⏳</td></tr>
+    <tr><td>TK4: Meningkatkan integriti dan akauntabiliti<br><div class="progress-bar"><div class="progress-fill" style="width: 50%">50%</div></div></td><td>50%</td><td>🔄</td></tr>
+    <tr><td>TK5: Mengoptimumkan penggunaan teknologi<br><div class="progress-bar"><div class="progress-fill" style="width: 80%">80%</div></div></td><td>80%</td><td>✅</td></tr>
+  </table>
+
+  <h2>T1S2</h2>
+  <table>
+    <tr><th>Tindakan Teknikal</th><th>Kemajuan</th><th>Status</th></tr>
+    <tr><td>TK6: Garis panduan pelantikan nazir/mutawalli<br><div class="progress-bar"><div class="progress-fill" style="width: 60%">60%</div></div></td><td>60%</td><td>🔄</td></tr>
+  </table>
+
+  <h2>T1S3</h2>
+  <table>
+    <tr><th>Tindakan Teknikal</th><th>Kemajuan</th><th>Status</th></tr>
+    <tr><td>TK7: Tambah bakat dalam pengurusan hartanah/digital<br><div class="progress-bar"><div class="progress-fill" style="width: 30%">30%</div></div></td><td>30%</td><td>🔄</td></tr>
+    <tr><td>TK8: Kolaborasi dengan agensi Persekutuan<br><div class="progress-bar"><div class="progress-fill" style="width: 50%">50%</div></div></td><td>50%</td><td>🔄</td></tr>
+  </table>
+
+  <script>
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(pieCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Kemajuan', 'Baki'],
+        datasets: [{
+          data: [43.1, 56.9],
+          backgroundColor: [
+            'rgba(76, 175, 80, 0.9)',
+            'rgba(220, 220, 220, 0.5)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          legend: {
+            display: true
+          },
+          tooltip: {
+            enabled: false
+          },
+          datalabels: {
+            display: true,
+            formatter: (value) => value + '%',
+            color: '#000',
+            font: {
+              weight: 'bold',
+              size: 16
+            }
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: ['T1S1', 'T1S2', 'T1S3'],
+        datasets: [{
+          label: 'Kemajuan (%)',
+          data: [41, 60, 40],
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
