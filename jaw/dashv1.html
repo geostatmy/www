@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <title>Teras 1 Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 40px;
-      background-color: #f5f5f5;
+      background-color: #f4f4f4;
     }
     h1 {
       text-align: center;
@@ -64,23 +63,19 @@
 </head>
 <body>
   <h1>KEMAJUAN TERAS 1</h1>
-  <div class="summary">
+
   <div class="chart-container">
     <canvas id="pieChart" width="200" height="200"></canvas>
   </div>
-  
-    <strong>Purata Kemajuan Teras 1:</strong> 43.1%<br>
+
+  <div class="summary">
     <strong>Status Keseluruhan TERAS 1:</strong><br>
     ✅ Selesai: 1<br>
     🔄 Sedang Dijalankan: 6<br>
     ⏳ Belum Mula: 1<br><br>
-  </div>
-  <br>
-  
-  <h2>INISIATIF STRATEGIK</h2>
-  <table>
+    <strong>Purata Kemajuan Teras 1:</strong> 43.1%
     <canvas id="barChart" width="400" height="150"></canvas>
-  </table>
+  </div>
 
   <h2>T1S1</h2>
   <table>
@@ -106,6 +101,26 @@
   </table>
 
   <script>
+    const centerTextPlugin = {
+      id: 'centerText',
+      beforeDraw: function(chart) {
+        const { width } = chart;
+        const { height } = chart;
+        const ctx = chart.ctx;
+        ctx.restore();
+        const fontSize = (height / 100).toFixed(2);
+        ctx.font = fontSize + "em sans-serif";
+        ctx.textBaseline = "middle";
+
+        const text = "43.1%";
+        const textX = Math.round((width - ctx.measureText(text).width) / 2);
+        const textY = height / 2;
+
+        ctx.fillText(text, textX, textY);
+        ctx.save();
+      }
+    };
+
     const pieCtx = document.getElementById('pieChart').getContext('2d');
     const pieChart = new Chart(pieCtx, {
       type: 'doughnut',
@@ -114,7 +129,7 @@
         datasets: [{
           data: [43.1, 56.9],
           backgroundColor: [
-            'rgba(76, 175, 80, 0.9)',
+            'rgba(75, 192, 192, 0.9)',
             'rgba(220, 220, 220, 0.5)'
           ],
           borderWidth: 1
@@ -128,19 +143,10 @@
           },
           tooltip: {
             enabled: false
-          },
-          datalabels: {
-            display: true,
-            formatter: (value) => value + '%',
-            color: '#000',
-            font: {
-              weight: 'bold',
-              size: 16
-            }
           }
         }
       },
-      plugins: [ChartDataLabels]
+      plugins: [centerTextPlugin]
     });
 
     const barCtx = document.getElementById('barChart').getContext('2d');
@@ -167,5 +173,6 @@
       }
     });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </body>
 </html>
