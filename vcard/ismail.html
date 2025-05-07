@@ -422,17 +422,14 @@
     color: #666;
   }
 
-  .arrow-down {
-    font-size: 24px;
-    color: #aaa;
-    margin-top: 16px;
-    animation: bounce 1.5s infinite;
-  }
+    .arrow-down {
+      animation: bounce 1.5s infinite;
+    }
 
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(6px); }
-  }
+    @keyframes bounce {
+      10%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
 
   .welcome-message {
     text-align: center;
@@ -488,7 +485,7 @@
 </div>
 <br>
 <button class="toggle-button" onclick="togglePanel()">
-    Let's Connect!
+    <div class="arrow-down">Let's Connect!</div>
     <span class="arrow">&#9660;</span>
 </button>
 
@@ -518,9 +515,9 @@
     </div>
 </div>
 
-    <div class="placeholder welcome-message">
+<!--     <div class="placeholder welcome-message">
     <div class="arrow-down"><i class="fa fa-chevron-down" style="font-size:40px"></i></div>
-    </div> 
+    </div>  -->
 
 <script>
 let isDragging = false;
