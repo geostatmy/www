@@ -291,8 +291,17 @@
 }
 
 /* Position the QR code icon at the top left */
+    .qr-code-icon {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+      z-index: 1000;
+    }
   
-  .qr-code-icon {
+/*   .qr-code-icon {
     position: fixed;
     top: 20px;
     left: 20px;
@@ -301,7 +310,7 @@
     border-radius: 50%;
     cursor: pointer;
     z-index: 1000;
-  }
+  } */
 
   /* Optional: Adjust size of the icon */
   .qr-code-icon i {
