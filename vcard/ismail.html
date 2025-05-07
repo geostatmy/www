@@ -408,6 +408,61 @@
   }
 }
 
+.placeholder {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .placeholder h2 {
+    margin-bottom: 10px;
+    color: #444;
+  }
+
+  .placeholder p {
+    color: #666;
+  }
+
+  .arrow-down {
+    font-size: 24px;
+    color: #aaa;
+    margin-top: 16px;
+    animation: bounce 1.5s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  .welcome-message {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin: 40px 0 20px;
+    animation: fadeSlideIn 1.2s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .welcome-message span {
+    display: block;
+    margin: 6px 0;
+    transition: color 0.3s ease;
+  }
+
+  .welcome-message span:hover {
+    color: #4e342e;
+    cursor: pointer;
+  }
+
+  @keyframes fadeSlideIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
@@ -437,7 +492,10 @@
     <span class="arrow">&#9660;</span>
 </button>
 
-
+<div class="placeholder welcome-message">
+<h3>Assalamualaikum and Good Day!</h3>
+<p>Please click or drag the card to view the details.</p>
+<div class="arrow-down"><i class="fa fa-chevron-down" style="font-size:24px"></i></div>
 
 <div class="panel" id="menuPanel">
     <div class="menu">
