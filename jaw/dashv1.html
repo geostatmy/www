@@ -145,21 +145,27 @@
       plugins: [{
         id: 'centerText',
         beforeDraw: function(chart) {
-          const width = chart.width;
-          const height = chart.height;
           const ctx = chart.ctx;
+          const width = chart.chartArea.right - chart.chartArea.left;
+          const height = chart.chartArea.bottom - chart.chartArea.top;
+          const x = chart.chartArea.left + width / 2;
+          const y = chart.chartArea.top + height / 2;
           const percentage = chart.config.data.datasets[0].data[0];
-          ctx.restore();
-          const fontSize = (height / 250).toFixed(2);
-          ctx.font = fontSize + "em sans-serif";
-          ctx.fillStyle = '#000';
-          ctx.textBaseline = 'middle';
-          ctx.textAlign = 'center';
-          ctx.fillText(percentage + '%', width / 2, height / 2);
+      
           ctx.save();
+          ctx.font = 'bold 26px Arial';
+          ctx.fillStyle = '#000';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(percentage + '%', x, y);
+          ctx.restore();
         }
       }]
     });
+
+
+  
+
 
     const barCtx = document.getElementById('barChart').getContext('2d');
     const barChart = new Chart(barCtx, {
